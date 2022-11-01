@@ -1,4 +1,4 @@
-# SEEDSAND staking contract intergration 
+# NFT staking contract intergration 
 
 ## Structure
 ### Get IDL for frontend: 
