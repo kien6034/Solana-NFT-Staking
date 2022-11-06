@@ -23,7 +23,7 @@ const  main= async()=>{
     const endTime =  new anchor.BN(0);
     const lockDuration =  new anchor.BN(0);
     let collection = new solana.PublicKey(data["collection"]);
-
+    const max_stake_amount = new anchor.BN(10);
 
     //init the staking pool 
     let tx = await bot.initialize(
@@ -31,6 +31,7 @@ const  main= async()=>{
       startTime,
       endTime,
       lockDuration,
+      max_stake_amount,
       null // alow any nft to stake 
       );
 

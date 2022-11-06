@@ -6,7 +6,6 @@ const Transaction = anchor.web3.Transaction;
 import {createMintNft} from "../utils/token";
 import { getAtaAccount, getTokenMetadata } from "../utils/pda";
 
-
 const fs = require("fs");
 
 /**

@@ -11,6 +11,7 @@ use std::str;
 
 pub fn stake(
     ctx: Context<Stake>,
+    internal_id: String,
 ) -> Result<()> {
     let staker = & ctx.accounts.staker;
     let controller = &mut ctx.accounts.controller;
@@ -21,6 +22,7 @@ pub fn stake(
 
     //** ******** CHECK the constrain  ********* */
     require_eq!(controller.check_stake_time(), true, ControllerError::NotInStakeTime);
+    require!(controller.total_amount_staked < controller.max_stake_amount, StakeError::StakeAmountExceeded);
     
     // ******** CHECK NFT from CORRECT COLLECTION  ********* */
     if controller.collection != None {
@@ -67,6 +69,7 @@ pub fn stake(
     )?;
 
     msg!("action: stake");
+    msg!("internal_id: {}", internal_id);
     msg!("staker: {}", staker.to_account_info().key);
     msg!("controller: {}", &ctx.accounts.controller.to_account_info().key);
     msg!("mint_of_nft: {}", mint_of_nft.to_account_info().key);

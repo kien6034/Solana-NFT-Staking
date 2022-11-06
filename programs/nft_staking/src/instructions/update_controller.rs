@@ -77,6 +77,7 @@ pub struct UpdateController<'info> {
     pub authorizer: Signer<'info>,
 
     #[account(
+        mut,
         has_one = authorizer
     )]
     pub controller: Account<'info, Controller>,

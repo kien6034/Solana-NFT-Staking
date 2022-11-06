@@ -67,6 +67,10 @@
         {
           "name": "lockDuration",
           "type": "i64"
+        },
+        {
+          "name": "maxStakeAmount",
+          "type": "u64"
         }
       ]
     },
@@ -111,7 +115,7 @@
         },
         {
           "name": "controller",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         }
       ],
@@ -145,6 +149,31 @@
           "type": {
             "option": "i64"
           }
+        }
+      ]
+    },
+    {
+      "name": "updateAdmin",
+      "accounts": [
+        {
+          "name": "authorizer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "controller",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "idx",
+          "type": "u8"
+        },
+        {
+          "name": "admin",
+          "type": "publicKey"
         }
       ]
     },
@@ -258,7 +287,12 @@
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "unstake",
@@ -304,7 +338,12 @@
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "claim",
@@ -365,7 +404,12 @@
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -403,6 +447,16 @@
           {
             "name": "authorizer",
             "type": "publicKey"
+          },
+          {
+            "name": "admins",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "maxStakeAmount",
+            "type": "u64"
           },
           {
             "name": "accumulatedDebt",
@@ -530,6 +584,9 @@
           },
           {
             "name": "InvalidMetadataAccount"
+          },
+          {
+            "name": "StakeAmountExceeded"
           }
         ]
       }
@@ -566,6 +623,17 @@
           }
         ]
       }
+    },
+    {
+      "name": "UpdateAdminErrors",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InvalidUpdateIndex"
+          }
+        ]
+      }
     }
   ],
   "errors": [
@@ -573,5 +641,8 @@
       "code": 6000,
       "name": "NotInStakeTime"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "AvkGefXsDuKULstEBSFW8i32nF4r8MWBUpWZqAzLhgXL"
+  }
 }

@@ -7,6 +7,7 @@ use crate::{CONTROLLER_PDA_SEED, STAKE_PDA_SEED, STAKE_CONTROLLER_PDA_SEED};
 
 pub fn claim(
     ctx: Context<Claim>,
+    internal_id: String
 ) -> Result<()> {
     let stake_info = &mut ctx.accounts.stake_info;
     let controller = &mut ctx.accounts.controller;
@@ -18,6 +19,19 @@ pub fn claim(
 
     //********** Calculate reward amount and update data  ********* */
     let pending_reward = stake_info.get_pending_reward(controller);
+
+    if vault.amount == 0 {
+        msg!("action: claim");
+        msg!("internal_id: {}", internal_id);
+        msg!("staker: {}", &ctx.accounts.staker.to_account_info().key);
+        msg!("controller: {}", &ctx.accounts.controller.to_account_info().key);
+        msg!("stake_info: {}", &ctx.accounts.stake_info.to_account_info().key);
+        msg!("mint_of_nft: {}", &ctx.accounts.stake_info.mint_of_nft.key());
+        msg!("stake_time: {}", &ctx.accounts.stake_info.stake_time);
+        msg!("reward_amount: {}", 0);
+        msg!("note: pool out of reward");
+        return Ok(())
+    }
 
     require!(pending_reward <= vault.amount, ClaimError::InsufficentRewardFund);
 
@@ -49,6 +63,7 @@ pub fn claim(
     anchor_spl::token::transfer(cpi_ctx, pending_reward)?;
 
     msg!("action: claim");
+    msg!("internal_id: {}", internal_id);
     msg!("staker: {}", &ctx.accounts.staker.to_account_info().key);
     msg!("controller: {}", &ctx.accounts.controller.to_account_info().key);
     msg!("stake_info: {}", &ctx.accounts.stake_info.to_account_info().key);

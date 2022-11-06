@@ -11,6 +11,8 @@ interface PDAParam {
     bump: number
 }
 
+const FAKE_INTERNAL_ID = "fake_internal_id";
+
 export class Bot{
     deployer: solana.Keypair;
     provider: anchor.AnchorProvider;
@@ -74,10 +76,10 @@ export class Bot{
 
 
     //// ----------------------- SINGLE FUCTIONS ------------------------------
-    initialize = async(reward_per_second: anchor.BN, start_time: anchor.BN, end_time: anchor.BN, lock_duration: anchor.BN, collection:  null | anchor.web3.PublicKey) => {
+    initialize = async(reward_per_second: anchor.BN, start_time: anchor.BN, end_time: anchor.BN, lock_duration: anchor.BN, max_stake_amount: anchor.BN, collection:  null | anchor.web3.PublicKey) => {
       let controllerPDA= await this.getControllerPDA();
       let vaultPDA = await this.getVaultPDA();
-      return await this.program.methods.initialize(this.internalId, collection, reward_per_second, start_time, end_time, lock_duration).accounts({
+      return await this.program.methods.initialize(this.internalId, collection, reward_per_second, start_time, end_time, lock_duration,max_stake_amount).accounts({
         initializer: this.deployer.publicKey, // vi phantom connected
         mintOfRewardToken: this.mint, // sss token public key  
         vault: vaultPDA.key,  // pda vault public key 
@@ -100,6 +102,18 @@ export class Bot{
       }).signers([this.deployer]).rpc()
     }
 
+    updateAdmin= async(
+      idx: number,
+      addr: anchor.web3.PublicKey
+    )=>{
+      let controllerPDA = await this.getControllerPDA();
+      
+      return await this.program.methods.updateAdmin(idx, addr).accounts({
+        authorizer: this.deployer.publicKey,
+        controller: controllerPDA.key
+      }).signers([this.deployer]).rpc()
+    }
+    
 
     withdrawReward = async(caller: null | anchor.web3.Keypair)=>{
       if (caller == null){
@@ -139,7 +153,7 @@ export class Bot{
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
       let metadataPDA = await getTokenMetadata(nftMint);
  
-      return await this.program.methods.stake().accounts({
+      return await this.program.methods.stake(FAKE_INTERNAL_ID).accounts({
           staker: staker.publicKey,
           controller: controllerPDA.key,
           mintOfNft: nftMint,
@@ -158,7 +172,7 @@ export class Bot{
       let stakePDA = await this.getStakePDA(staker.publicKey, nftMint);
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
 
-      return await this.program.methods.claim().accounts({
+      return await this.program.methods.claim(FAKE_INTERNAL_ID).accounts({
         staker: staker.publicKey,
         controller: controllerPDA.key,
         stakeController: stakeControllerPDA.key,
@@ -178,7 +192,7 @@ export class Bot{
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
       let nftAta = await getAtaAccount(nftMint, this.deployer.publicKey);
 
-      return await this.program.methods.unstake().accounts({
+      return await this.program.methods.unstake(FAKE_INTERNAL_ID).accounts({
         staker: staker.publicKey,
         controller: controllerPDA.key,
         stakeController: stakeControllerPDA.key,
@@ -192,11 +206,11 @@ export class Bot{
 
 
     //// ----------------------- GET INSTRUCTIONS ------------------------------
-    getInitializeIx = async(deployer: anchor.web3.PublicKey,reward_per_second: anchor.BN, start_time: anchor.BN, end_time: anchor.BN, lock_duration: anchor.BN,  collection:  null | anchor.web3.PublicKey) => {
+    getInitializeIx = async(deployer: anchor.web3.PublicKey,reward_per_second: anchor.BN, start_time: anchor.BN, end_time: anchor.BN, lock_duration: anchor.BN, max_stake_amount: number,  collection:  null | anchor.web3.PublicKey) => {
       let controllerPDA= await this.getControllerPDA();
       let vaultPDA = await this.getVaultPDA();
 
-      let ix = this.program.instruction.initialize(this.internalId, collection, reward_per_second, start_time, end_time, lock_duration,{
+      let ix = this.program.instruction.initialize(this.internalId, collection, reward_per_second, start_time, end_time, lock_duration, max_stake_amount, collection,{
         accounts: {
           initializer: deployer,
           mintOfRewardToken: this.mint,
@@ -233,7 +247,7 @@ export class Bot{
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
       let metadataPDA = await getTokenMetadata(nftMint);
   
-      let ix = this.program.instruction.stake({
+      let ix = this.program.instruction.stake(FAKE_INTERNAL_ID,{
         accounts:{ 
           staker: staker.publicKey,
           controller: controllerPDA.key,
@@ -259,7 +273,7 @@ export class Bot{
       let stakePDA = await this.getStakePDA(staker.publicKey, nftMint);
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
 
-      let ix= this.program.instruction.claim({
+      let ix= this.program.instruction.claim(FAKE_INTERNAL_ID,{
           accounts: {
             staker: staker.publicKey,
             controller: controllerPDA.key,
@@ -283,7 +297,7 @@ export class Bot{
       let stakePDA = await this.getStakePDA(staker.publicKey, nftMint);
       let escrowPDA = await this.getEscrowPDA(staker.publicKey, nftMint);
 
-      let ix= this.program.instruction.unstake({
+      let ix= this.program.instruction.unstake(FAKE_INTERNAL_ID,{
           accounts: {
             staker: staker.publicKey,
             controller: controllerPDA.key,

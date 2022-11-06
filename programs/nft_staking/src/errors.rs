@@ -22,7 +22,8 @@ pub enum StakeError {
     InvalidCollection,
     Unverified,
     NotACollectible,
-    InvalidMetadataAccount
+    InvalidMetadataAccount,
+    StakeAmountExceeded
 }
 
 #[error_code]
@@ -41,4 +42,10 @@ pub enum UnstakeError {
 #[error_code]
 pub enum WithdrawError {
     WithdrawError,
+}
+
+
+#[error_code]
+pub enum UpdateAdminErrors {
+    InvalidUpdateIndex
 }

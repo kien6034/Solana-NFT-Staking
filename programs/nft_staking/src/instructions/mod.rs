@@ -23,4 +23,6 @@ pub mod claim;
 pub use init_stake_controller::*;
 pub mod init_stake_controller;
 
-pub use init_stake_controller::*;
+
+pub use update_admin::*;
+pub mod update_admin;

@@ -67,6 +67,10 @@ export type NftStaking = {
         {
           "name": "lockDuration",
           "type": "i64"
+        },
+        {
+          "name": "maxStakeAmount",
+          "type": "u64"
         }
       ]
     },
@@ -111,7 +115,7 @@ export type NftStaking = {
         },
         {
           "name": "controller",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         }
       ],
@@ -145,6 +149,31 @@ export type NftStaking = {
           "type": {
             "option": "i64"
           }
+        }
+      ]
+    },
+    {
+      "name": "updateAdmin",
+      "accounts": [
+        {
+          "name": "authorizer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "controller",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "idx",
+          "type": "u8"
+        },
+        {
+          "name": "admin",
+          "type": "publicKey"
         }
       ]
     },
@@ -258,7 +287,12 @@ export type NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "unstake",
@@ -304,7 +338,12 @@ export type NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "claim",
@@ -365,7 +404,12 @@ export type NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -403,6 +447,16 @@ export type NftStaking = {
           {
             "name": "authorizer",
             "type": "publicKey"
+          },
+          {
+            "name": "admins",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "maxStakeAmount",
+            "type": "u64"
           },
           {
             "name": "accumulatedDebt",
@@ -530,6 +584,9 @@ export type NftStaking = {
           },
           {
             "name": "InvalidMetadataAccount"
+          },
+          {
+            "name": "StakeAmountExceeded"
           }
         ]
       }
@@ -563,6 +620,17 @@ export type NftStaking = {
         "variants": [
           {
             "name": "WithdrawError"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateAdminErrors",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InvalidUpdateIndex"
           }
         ]
       }
@@ -645,6 +713,10 @@ export const IDL: NftStaking = {
         {
           "name": "lockDuration",
           "type": "i64"
+        },
+        {
+          "name": "maxStakeAmount",
+          "type": "u64"
         }
       ]
     },
@@ -689,7 +761,7 @@ export const IDL: NftStaking = {
         },
         {
           "name": "controller",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         }
       ],
@@ -723,6 +795,31 @@ export const IDL: NftStaking = {
           "type": {
             "option": "i64"
           }
+        }
+      ]
+    },
+    {
+      "name": "updateAdmin",
+      "accounts": [
+        {
+          "name": "authorizer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "controller",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "idx",
+          "type": "u8"
+        },
+        {
+          "name": "admin",
+          "type": "publicKey"
         }
       ]
     },
@@ -836,7 +933,12 @@ export const IDL: NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "unstake",
@@ -882,7 +984,12 @@ export const IDL: NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "claim",
@@ -943,7 +1050,12 @@ export const IDL: NftStaking = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "internalId",
+          "type": "string"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -981,6 +1093,16 @@ export const IDL: NftStaking = {
           {
             "name": "authorizer",
             "type": "publicKey"
+          },
+          {
+            "name": "admins",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "maxStakeAmount",
+            "type": "u64"
           },
           {
             "name": "accumulatedDebt",
@@ -1108,6 +1230,9 @@ export const IDL: NftStaking = {
           },
           {
             "name": "InvalidMetadataAccount"
+          },
+          {
+            "name": "StakeAmountExceeded"
           }
         ]
       }
@@ -1141,6 +1266,17 @@ export const IDL: NftStaking = {
         "variants": [
           {
             "name": "WithdrawError"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateAdminErrors",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InvalidUpdateIndex"
           }
         ]
       }

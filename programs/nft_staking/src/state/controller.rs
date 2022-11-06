@@ -9,6 +9,8 @@ pub struct Controller {
     pub end_time: i64,
     pub lock_duration: i64,
     pub authorizer: Pubkey,
+    pub admins: Vec<Pubkey>,
+    pub max_stake_amount: u64,
     pub accumulated_debt: u64,
     pub last_update_time: i64,
     pub total_amount_staked: u64,

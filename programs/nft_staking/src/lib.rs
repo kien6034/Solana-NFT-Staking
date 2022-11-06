@@ -25,9 +25,10 @@ pub mod nft_staking {
         reward_per_token_per_second: u64,
         start_time: i64,
         end_time: i64,
-        lock_duration: i64
+        lock_duration: i64,
+        max_stake_amount: u64
     ) -> Result<()> {
-        instructions::initialize::initialize(ctx, internal_id, collection, reward_per_token_per_second, start_time, end_time, lock_duration)
+        instructions::initialize::initialize(ctx, internal_id, collection, reward_per_token_per_second, start_time, end_time, lock_duration, max_stake_amount)
     }
 
     pub fn init_stake_controller(ctx: Context<InitStakeController>) -> Result<()> {
@@ -45,20 +46,37 @@ pub mod nft_staking {
         instructions::update_controller::update_controller(ctx, collection, reward_per_token_per_second, start_time, end_time, lock_duration)
     }
 
+    pub fn update_admin(
+        ctx: Context<UpdateAdmin>,
+        idx: u8,
+        admin: Pubkey
+    ) -> Result<()> {
+        instructions::update_admin::update_admin(ctx, idx, admin)
+    }
+
     pub fn withdraw_reward(ctx: Context<WithdrawReward>) -> Result<()> {
         instructions::withdraw_reward::withdraw_reward(ctx)
     }
 
-    pub fn stake(ctx: Context<Stake>) -> Result<()> {
-        instructions::stake::stake(ctx)
+    pub fn stake(
+        ctx: Context<Stake>,
+        internal_id: String,
+    ) -> Result<()> {
+        instructions::stake::stake(ctx, internal_id)
     }
 
-    pub fn unstake(ctx: Context<Unstake>) -> Result<()> {
-        instructions::unstake::unstake(ctx)
+    pub fn unstake(
+        ctx: Context<Unstake>,
+        internal_id: String
+    ) -> Result<()> {
+        instructions::unstake::unstake(ctx, internal_id)
     }
 
-    pub fn claim(ctx: Context<Claim>) -> Result<()> {
-        instructions::claim::claim(ctx)
+    pub fn claim(
+        ctx: Context<Claim>,
+        internal_id: String
+    ) -> Result<()> {
+        instructions::claim::claim(ctx, internal_id)
     }
 }
 

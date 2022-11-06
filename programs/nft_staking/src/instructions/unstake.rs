@@ -8,6 +8,7 @@ use crate::{STAKE_PDA_SEED, STAKE_CONTROLLER_PDA_SEED};
 
 pub fn unstake(
     ctx: Context<Unstake>,
+    internal_id: String,
 ) -> Result<()> {
     //**** Transfer nft to the staker --> Transfer reward to the staker  ---> Remove the escrow + stake info account */
     let staker = &ctx.accounts.staker;
@@ -71,6 +72,7 @@ pub fn unstake(
     
 
     msg!("action: unstake");
+    msg!("internal_id: {}", internal_id);
     msg!("staker: {}", &ctx.accounts.staker.to_account_info().key);
     msg!("controller: {}", controller.to_account_info().key);
     msg!("mint_of_nft:{}", stake_info.mint_of_nft.key());

@@ -14,7 +14,8 @@ pub fn initialize(
     reward_per_token_per_second: u64,
     start_time: i64,
     end_time: i64,
-    lock_duration: i64
+    lock_duration: i64,
+    max_stake_amount: u64
 ) -> Result<()> {
     //********** CONSTRAIN  ********* */
     require_neq!(start_time, 0, InitializeError::StartTimeNotValid);
@@ -38,7 +39,8 @@ pub fn initialize(
     controller.accumulated_debt = 0;
     controller.internal_id = internal_id.clone();
     controller.lock_duration = lock_duration;
-
+    controller.max_stake_amount = max_stake_amount;
+ 
     // logging 
     msg!("action: create_staking_pool");
     msg!("internal_id: {}", internal_id);
